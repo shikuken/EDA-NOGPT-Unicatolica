@@ -1,0 +1,66 @@
+class DoublyLinkedListNode {
+    constructor(nombre, apellido) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.next = null;
+        this.previous = null;
+    }
+}
+
+class DoublyLinkedList {
+    constructor() {
+        this.head = null;
+        this.tail = null;
+    }
+
+    searchByFirstLetter(targetLetter) {
+        let currentNode = this.head;
+        const foundNodes = [];
+
+        while (currentNode !== null) {
+            const firstInitial = currentNode.nombre[0];
+            const lastInitial = currentNode.apellido[0];
+
+            if (
+                firstInitial.toLowerCase() === targetLetter.toLowerCase() ||
+                lastInitial.toLowerCase() === targetLetter.toLowerCase()
+            ) {
+                foundNodes.push(currentNode);
+            }
+
+            currentNode = currentNode.next;
+        }
+
+        return foundNodes;
+    }
+
+    insertByFirstLetter(newNode) {
+        if (this.head === null) {
+            this.head = this.tail = newNode;
+        } else {
+            let currentNode = this.head;
+
+            while (
+                currentNode !== null &&
+                currentNode.nombre.toLowerCase() < newNode.nombre.toLowerCase()
+            ) {
+                currentNode = currentNode.next;
+            }
+
+            if (currentNode === null) {
+                this.tail.next = newNode;
+                newNode.previous = this.tail;
+                this.tail = newNode;
+            } else if (currentNode === this.head) {
+                newNode.next = this.head;
+                this.head.previous = newNode;
+                this.head = newNode;
+            } else {
+                const previousNode = currentNode.previous;
+                previousNode.next = newNode;
+                newNode.previous = previousNode;
+                newNode.next = currentNode;
+                currentNode.previous = newNode;
+            }
+        }
+    }
